@@ -1,7 +1,7 @@
 {
-  "name": "richs_plugins",
+  "name": "richs-plugins",
   "owner": { "name": "Rich Nash", "email": "rvnash@gmail.com" },
   "plugins": [
-    { "name": "wa_tasks_plugin", "source": "./wa_tasks_plugin" }
+    { "name": "wa-tasks-plugin", "source": "./wa_tasks_plugin" }
   ]
 }
