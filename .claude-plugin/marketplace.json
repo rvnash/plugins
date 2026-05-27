@@ -1,6 +1,6 @@
 {
   "name": "richs_plugins",
-  "owner": { "name": "Rich Nash", "email": "richard.nash@westarete.com" },
+  "owner": { "name": "Rich Nash", "email": "rvnash@gmail.com" },
   "plugins": [
     { "name": "wa_tasks_plugin", "source": "./wa_tasks_plugin" }
   ]
