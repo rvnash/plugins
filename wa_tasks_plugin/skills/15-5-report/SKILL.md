@@ -79,7 +79,7 @@ Make these calls as a single batch when the tool harness allows it:
 
 **Google Drive** — `list_recent_files` filtered to items the user modified in the window. Capture title, link, and a one-line "what changed" note if the doc is short enough to read.
 
-**Basecamp** — for each project the user participates in, use `get_events` scoped to the window, or `global_search` if event filtering is unclear. Capture posts the user authored, todos the user completed, and substantive comments the user left.
+**Basecamp** — use whichever Basecamp MCP server is connected (tool names vary by server; match by capability — its tools are usually prefixed `basecamp`). For each project the user participates in, use the server's activity/events tool scoped to the window if it has one, otherwise its search tool (e.g. a `search` tool) and its list tools for recordings/todos/messages. Capture posts the user authored, todos the user completed, and substantive comments the user left. If no Basecamp tool is connected, skip Basecamp and note it in the Sources footer.
 
 **Linear** — `list_issues` filtered by assignee = user and `updatedAt` in the window. Capture issues that moved to In Review or Done, and comments the user authored. Resolve the user via `get_user` if needed.
 

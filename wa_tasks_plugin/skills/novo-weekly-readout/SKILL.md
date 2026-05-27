@@ -32,10 +32,12 @@ The readout covers **last Friday through right now**.
 
 Goal: extract the template structure (section headings, ordering, tone, length, formatting conventions like bold/links/checklists).
 
+Use **whichever Basecamp MCP server is connected** — tool names vary between servers, so match by capability (the Basecamp tools are usually prefixed `basecamp`). If no Basecamp tool is connected, stop and tell the user no Basecamp connector is available.
+
 Try these in order, stopping at the first one that works:
 
-1. **Basecamp MCP** — call `basecamp:get_messages` with `project_id=38088674`, `message_board_id=7950419793` (the **Readouts** board, not the Readouts board). If "Tool result too large," retry with `message_board_id=7546621971`. If still too large, fall through.
-2. **Basecamp MCP, single-message fetch** — if you can identify the 3 most recent message IDs from any other tool result (e.g. a smaller-scoped search), call `basecamp:get_message` for each.
+1. **List messages on a board** — call the connected server's "list messages" tool (e.g. `list_messages` / `get_messages`) with `project_id=38088674`, `message_board_id=7950419793`. If "Tool result too large," retry with `message_board_id=7546621971`. If still too large, fall through.
+2. **Single-message fetch** — if you can identify the 3 most recent message IDs from any other tool result (e.g. a smaller-scoped search), call the server's "get message" tool (e.g. `get_message`) for each.
 
 From the 3 posts, derive a template: subject line pattern (e.g. "2026-05-16 Novo Weekly Readout"), section headers in order, what kind of content goes in each section, and any standard sign-off.
 
@@ -97,7 +99,7 @@ Mirror the template from Step 2 as closely as possible: same section order, same
 
 ### Step 6 — Post the draft to the Readouts board
 
-Call `basecamp:create_message` with:
+Call the connected Basecamp server's "create message" tool (e.g. `create_message`) with:
 
 - `project_id`: `38088674`
 - `message_board_id`: `7546621971` (the **Readouts** board)
@@ -105,9 +107,9 @@ Call `basecamp:create_message` with:
 - `content`: the HTML body composed in Step 5
 - `status`: `draft`
 
-Capture the `app_url` (or `url`) returned by `create_message` — that is the link the user will follow to review and edit the draft in Basecamp.
+Capture the `app_url` (or `url`) returned by the create call — that is the link the user will follow to review and edit the draft in Basecamp.
 
-If `create_message` fails, do not retry against a different board. Report the error to the user, include the composed subject and HTML body in the response so nothing is lost, and stop.
+If the create call fails, do not retry against a different board. Report the error to the user, include the composed subject and HTML body in the response so nothing is lost, and stop.
 
 Image placeholders (e.g. `[INSERT: mixpanel-usage-2026-05-20.png]`) remain inline in the posted HTML — the user will replace them with pasted images when editing in Basecamp.
 

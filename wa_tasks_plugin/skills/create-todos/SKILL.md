@@ -9,6 +9,16 @@ Read back Rich's most recently posted 15-5 and create one Basecamp todo per "pri
 
 This skill is the natural follow-on to `15-5-report`: the 15-5 produces a list of priorities, and this skill puts each priority on a tracked todo list so it doesn't disappear in a Basecamp comment.
 
+## Basecamp tools
+
+This skill uses **whatever Basecamp MCP server is currently connected** — it does not require a specific one. Tool names vary between Basecamp servers, so match by capability rather than exact name. The operations needed, with common name variants:
+
+- **List comments on a message** — e.g. `list_comments`, `get_comments`
+- **List todos in a todolist** — e.g. `list_todos`, `get_todos`
+- **Create a todo** — e.g. `create_todo`
+
+At the start, look at the available tools, find the connected Basecamp server (its tools are usually prefixed `basecamp` or grouped under a Basecamp connector), and use its equivalents for each operation below. If no Basecamp tool is available, stop and tell the user no Basecamp connector is connected.
+
 ## Fixed locations
 
 These IDs are stable for Rich's account and should be used as-is:
@@ -25,7 +35,7 @@ These IDs are stable for Rich's account and should be used as-is:
 
 ### 1. Fetch the most recent 15-5
 
-Call `mcp__basecamp__get_comments` with `project_id="25906397"` and `recording_id="9428630577"`. Basecamp returns comments in chronological order; the most recent 15-5 is the **last** comment in the response (or the first when sorted by `created_at` descending). Pick the one whose author is Rich Nash and whose content has the 15-5 section headers.
+Using the connected Basecamp server's "list comments" tool, fetch the comments on `project_id="25906397"`, `recording_id="9428630577"` (parameter names may vary slightly by server — e.g. `recording_id`, `message_id`). Basecamp returns comments in chronological order; the most recent 15-5 is the **last** comment in the response (or the first when sorted by `created_at` descending). Pick the one whose author is Rich Nash and whose content has the 15-5 section headers.
 
 If no comments exist on the message, stop and tell the user: "No 15-5 has been posted yet — run /15-5-report first."
 
@@ -39,7 +49,7 @@ Find the section under the `What are your priorities for next week?` header. Eac
 
 ### 4. Create todos
 
-For each priority bullet, call `mcp__basecamp__create_todo` with:
+For each priority bullet, call the connected Basecamp server's "create todo" tool with:
 
 - `project_id`: `"25906397"`
 - `todolist_id`: `"5377896272"`
@@ -67,7 +77,7 @@ If any todo failed to create, list it separately under a `Failed:` heading with 
 ## Notes and constraints
 
 - Always pull the **latest** 15-5 comment, never an older one, unless the user names a specific date.
-- Never create duplicate todos. Before creating, call `mcp__basecamp__get_todos` with `todolist_id=5377896272` and skip any priority whose content already matches an open todo's content (case-insensitive substring match on the first 60 characters is enough).
+- Never create duplicate todos. Before creating, use the connected Basecamp server's "list todos" tool with `todolist_id=5377896272` and skip any priority whose content already matches an open todo's content (case-insensitive substring match on the first 60 characters is enough).
 - Do not modify the 15-5 comment.
 - Do not mark any todos as complete.
 - If the user asks to create todos for a *different* week, look further back in the comments and pick the comment matching that `Week of YYYY-MM-DD` header.
@@ -75,6 +85,8 @@ If any todo failed to create, list it separately under a `Failed:` heading with 
 
 ## Required tools
 
-- `mcp__basecamp__get_comments` — fetch comments on the 15-5 message
-- `mcp__basecamp__get_todos` — dedupe check
-- `mcp__basecamp__create_todo` — create each todo
+Provided by whichever Basecamp MCP server is connected (names vary — match by capability):
+
+- List comments on a message — fetch comments on the 15-5 message
+- List todos in a todolist — dedupe check
+- Create a todo — create each todo

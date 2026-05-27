@@ -4,7 +4,7 @@ Foundation plugin for the rich's work at West Arete. Assumes a baseline set of c
 
 ## Bundled connectors
 
-The plugin's `.mcp.json` configures five MCP servers. Installing the plugin offers all five to the user; each one still requires OAuth on first use.
+The plugin's `.mcp.json` configures four MCP servers. Installing the plugin offers all four to the user; each one still requires OAuth on first use.
 
 | Tool         | Source                                                                                          | Used for                              |
 | ------------ | ----------------------------------------------------------------------------------------------- | ------------------------------------- |
@@ -12,32 +12,12 @@ The plugin's `.mcp.json` configures five MCP servers. Installing the plugin offe
 | Google Drive | `https://drivemcp.googleapis.com/mcp/v1` (OAuth on first use)                                   | Documents the user edits              |
 | Gmail        | `https://gmailmcp.googleapis.com/mcp/v1` (OAuth on first use)                                   | Important email threads               |
 | Fathom       | `https://api.fathom.ai/mcp` (OAuth on first use)                                                | Recorded meetings, including CWSL     |
-| Basecamp     | Local stdio server from [georgeantonopoulos/Basecamp-MCP-Server](https://github.com/georgeantonopoulos/Basecamp-MCP-Server) | Project posts, todos, comments        |
 
-### One-time Basecamp setup
+## Basecamp (bring your own connector)
 
-Basecamp has no public OAuth MCP, so each user installs the local server once. Run these commands on the machine where Cowork is installed:
+Basecamp is **not bundled** in this plugin's `.mcp.json`. The `create-todos`, `15-5-report`, and `novo-weekly-readout` skills use **whatever Basecamp MCP server happens to be connected** in your environment — they match Basecamp tools by capability (list comments, list todos, create todo, list/get/create message, search) rather than by a hard-coded tool name, so any Basecamp MCP works.
 
-```bash
-git clone https://github.com/georgeantonopoulos/Basecamp-MCP-Server.git
-cd Basecamp-MCP-Server
-uv venv --python 3.12 venv
-source venv/bin/activate
-uv pip install -r requirements.txt
-uv pip install mcp
-python oauth_app.py   # open http://localhost:8000 and complete the Basecamp OAuth flow
-```
-
-Then set these environment variables so the plugin's `.mcp.json` can launch the server:
-
-| Variable                  | Value                                                          |
-| ------------------------- | -------------------------------------------------------------- |
-| `BASECAMP_MCP_PYTHON`     | Absolute path to `Basecamp-MCP-Server/venv/bin/python`         |
-| `BASECAMP_MCP_SCRIPT`     | Absolute path to `Basecamp-MCP-Server/basecamp_fastmcp.py`     |
-| `BASECAMP_CLIENT_ID`      | Basecamp OAuth client ID (from your Basecamp integrations page) |
-| `BASECAMP_CLIENT_SECRET`  | Basecamp OAuth client secret                                   |
-| `BASECAMP_ACCOUNT_ID`     | Numeric account ID from your Basecamp URL                      |
-| `BASECAMP_USER_AGENT`     | A descriptive string, e.g. `"company-base (you@example.com)"`  |
+Connect a Basecamp MCP server however you prefer (a hosted Basecamp connector, or a local stdio server such as [georgeantonopoulos/Basecamp-MCP-Server](https://github.com/georgeantonopoulos/Basecamp-MCP-Server)). If no Basecamp connector is present, the Basecamp-dependent skills will tell you so and stop rather than fail mid-run.
 
 ## Included skills
 
@@ -59,4 +39,4 @@ Drop new skill folders under `skills/` following the same pattern as the include
 
 ## Version
 
-0.4.0
+0.5.0
