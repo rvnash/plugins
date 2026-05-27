@@ -1,0 +1,10 @@
+{
+  "name": "wa_tasks_plugin",
+  "version": "0.4.0",
+  "description": "Foundation plugin assuming Linear, Basecamp, Google Drive, Gmail, and Fathom connectors. Includes a Friday status update skill, a 15-5 weekly report skill, a create-todos skill that turns 15-5 priorities into Basecamp todos, and a novo-weekly-readout skill that drafts the Novo weekly readout.",
+  "author": {
+    "name": "Rich Nash",
+    "email": "richard.nash@westarete.com"
+  },
+  "keywords": ["company", "status", "15-5", "todos", "novo", "readout", "linear", "basecamp", "gmail", "drive", "fathom"]
+}
