@@ -23,7 +23,7 @@ Connect a Basecamp MCP server however you prefer (a hosted Basecamp connector, o
 
 ### `15-5-report`
 
-Draft a 15-5 weekly report by pulling this week's activity from connected tools and filling in the West Arete 15-5 template. Triggered by phrases like "15-5", "fifteen-five", "weekly 15-5".
+Draft a 15-5 weekly report by pulling this week's activity from connected tools and filling in the West Arete 15-5 template (bold questions, no prompt sub-text). After a confirmation step, it posts the report as a reply on the fixed Basecamp 15-5 thread and returns the link. Triggered by phrases like "15-5", "fifteen-five", "weekly 15-5".
 
 ### `create-todos`
 
@@ -39,4 +39,4 @@ Drop new skill folders under `skills/` following the same pattern as the include
 
 ## Version
 
-0.5.0
+0.6.0
