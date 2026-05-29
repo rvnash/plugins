@@ -77,7 +77,7 @@ If any todo failed to create, list it separately under a `Failed:` heading with 
 ## Notes and constraints
 
 - Always pull the **latest** 15-5 comment, never an older one, unless the user names a specific date.
-- Never create duplicate todos. Before creating, use the connected Basecamp server's "list todos" tool with `todolist_id=5377896272` and skip any priority whose content already matches an open todo's content (case-insensitive substring match on the first 60 characters is enough).
+- Never create duplicate todos. Before creating, search for all of the users pending TODOS from any TODO list in Basecamp and skip any whose content already captures the concept
 - Do not modify the 15-5 comment.
 - Do not mark any todos as complete.
 - If the user asks to create todos for a *different* week, look further back in the comments and pick the comment matching that `Week of YYYY-MM-DD` header.
