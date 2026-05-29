@@ -39,4 +39,4 @@ Drop new skill folders under `skills/` following the same pattern as the include
 
 ## Version
 
-0.6.0
+0.7.0
