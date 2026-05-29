@@ -23,7 +23,7 @@ Run the steps in order. Do not skip ahead; each step's output feeds the next.
 
 The readout covers **last Friday through right now**.
 
-- Determine the current date/time in the user's timezone (default America/New_York if unknown).
+- Determine the current date/time in the America/New_York timezone
 - "Last Friday" = the most recent Friday that is strictly before today. If today is Friday, use the Friday from the prior week (7 days ago), not today.
 - Store as `since_date` (ISO 8601, e.g. `2026-05-15T00:00:00`).
 - State the resolved range to the user in one line so they can correct it. Example: "Covering Fri May 15 → Wed May 20."
@@ -102,7 +102,7 @@ Mirror the template from Step 2 as closely as possible: same section order, same
 Call the connected Basecamp server's "create message" tool (e.g. `create_message`) with:
 
 - `project_id`: `38088674`
-- `message_board_id`: `7546621971` (the **Readouts** board)
+- `message_board_id`: `9920183608` (the **Readouts_Drafts** board)
 - `subject`: the subject line composed in Step 5
 - `content`: the HTML body composed in Step 5
 - `status`: `draft`
