@@ -5,13 +5,12 @@ description: "Draft a weekly Novo readout and post it as a draft message on the 
 
 # Novo Weekly Readout
 
-Compile a weekly Novo readout, post it to the Readouts Basecamp message board, and return the link to the posted message so the user can review and edit it in Basecamp.
+Compile a weekly Novo readout as a .md text which can be copied/pasted into Basecamp.
 
 ## Fixed inputs
 
-- Basecamp project ID: `38088674`
-- Basecamp **Readouts** message board ID (source for past readouts to mirror): `7950419793` — if calls against this ID fail, also try `7546621971` (the ID returned by `get_message_board` for the same project)
-- Basecamp Readouts board URL (for reference): https://3.basecamp.com/4206247/buckets/38088674/message_boards/7950419793
+- Basecamp Project ID: `26016885`
+- Basecamp Message Board ID: `10006186557`
 - Linear workspace slug: `westarete-cwsl`
 - Linear team: `Engineering` (key `ENG`)
 
@@ -28,7 +27,7 @@ The readout covers **last Friday through right now**.
 - Store as `since_date` (ISO 8601, e.g. `2026-05-15T00:00:00`).
 - State the resolved range to the user in one line so they can correct it. Example: "Covering Fri May 15 → Wed May 20."
 
-### Step 2 — Read the 3 most recent readouts on the board
+### Step 2 — Read the 3 most recent readouts from the Basecamp Message Board
 
 Goal: extract the template structure (section headings, ordering, tone, length, formatting conventions like bold/links/checklists).
 
@@ -36,7 +35,7 @@ Use **whichever Basecamp MCP server is connected** — tool names vary between s
 
 Try these in order, stopping at the first one that works:
 
-1. **List messages on a board** — call the connected server's "list messages" tool (e.g. `list_messages` / `get_messages`) with `project_id=38088674`, `message_board_id=7950419793`. If "Tool result too large," retry with `message_board_id=7546621971`. If still too large, fall through.
+1. **List messages on a board** — call the connected server's "list messages" tool (e.g. `list_messages` / `get_messages`) with the Project ID and Message Board ID from above.
 2. **Single-message fetch** — if you can identify the 3 most recent message IDs from any other tool result (e.g. a smaller-scoped search), call the server's "get message" tool (e.g. `get_message`) for each.
 
 From the 3 posts, derive a template: subject line pattern (e.g. "2026-05-16 Novo Weekly Readout"), section headers in order, what kind of content goes in each section, and any standard sign-off.
@@ -79,51 +78,26 @@ Use the `ask_user_input_v0` tool. Ask all of these in one call so the user answe
 
 1. Other accomplishments **beyond what was found in Linear, Fathom, Teams, Slack, Gmail, and Zoom** — free text or "none."
 2. Things in progress to highlight — free text or "none."
-3. Screenshots or videos to include — ask the user to upload them in their next message, or paste links. Specify file types accepted.
+3. Screenshots or videos to put place holders in for. Place a placeholder line like `[INSERT: mixpanel-usage-2026-05-20.png]` exactly where the image should go).
 4. Any problems to highlight
 5. Any bug fixes to highlight
-6. Mixpanel usage screenshot — ask for an upload or link, and which view/metric it represents.
-7. Anything from the auto-gathered list (Step 3.5) to **exclude** from the draft — free text or "none."
+6. Anything from the auto-gathered list (Step 3.5) to **exclude** from the draft — free text or "none."
 
-After they respond, if they uploaded files, note the filenames/paths so you can reference them in the draft (Basecamp accepts inline images via paste; in the draft, place a placeholder line like `[INSERT: mixpanel-usage-2026-05-20.png]` exactly where the image should go).
 
 ### Step 5 — Compose the draft
 
 Mirror the template from Step 2 as closely as possible: same section order, same heading style, comparable length per section.
 
 - **Subject**: follow the past subject pattern (most readouts use a date or week label).
-- **Body**: use Basecamp's HTML rich text conventions — `<h1>`, `<h2>`, `<ul>`, `<li>`, `<a href>`, `<strong>`, `<em>`, `<div>`, line breaks. Do not invent sections that weren't in the past 3 readouts; do not drop sections that were consistent across them.
+- **Body**: use Basecamp's .md conventions. Do not invent sections that weren't in the past 3 readouts; do not drop sections that were consistent across them.
 - Sections are delimited by bold and blue headings
-- Insert image placeholders inline where screenshots/videos/Mixpanel belong, using the filenames the user provided.
+- Insert image placeholders inline where screenshots/videos/Mixpanel belong.
+- Do not use Linear Ticket numbers, they are internal only
+- Do not create links to the source information
 - Weave in items from Step 3.5 alongside Linear tickets. For Fathom/Zoom meeting takeaways, link the meeting; for Slack/Teams items, link the message; for Gmail items, link the thread. Mark anything you're unsure belongs in the Novo bucket with a trailing `(?)` for the user to verify when they open the posted draft in Basecamp.
 
-### Step 6 — Post the draft to the Readouts board
+### Step 6 — Present the result as .md text to the user
 
-Call the connected Basecamp server's "create message" tool (e.g. `create_message`) with:
-
-- `project_id`: `38088674`
-- `message_board_id`: `9920183608` (the **Readouts_Drafts** board)
-- `subject`: the subject line composed in Step 5
-- `content`: the HTML body composed in Step 5
-- `status`: `draft`
-
-Capture the `app_url` (or `url`) returned by the create call — that is the link the user will follow to review and edit the draft in Basecamp.
-
-If the create call fails, do not retry against a different board. Report the error to the user, include the composed subject and HTML body in the response so nothing is lost, and stop.
-
-Image placeholders (e.g. `[INSERT: mixpanel-usage-2026-05-20.png]`) remain inline in the posted HTML — the user will replace them with pasted images when editing in Basecamp.
-
-### Step 7 — Return the link to the user
-
-Present the result as:
-
-1. The resolved date range, one line.
-2. The subject line that was posted.
-3. The link to the posted draft on the Readouts board (the `app_url` from Step 6), labeled clearly (e.g. `Draft posted: <url>`).
-4. A short list of any image placeholders the user still needs to replace, with the matching filename for each.
-5. A one-line review checklist (e.g. "Verify the 3 ENG tickets I flagged with (?) belong in the Novo bucket, then replace image placeholders.").
-
-Do not paste the full HTML body or plain-text rendering into the chat response — the user will review and edit it directly in Basecamp via the link.
 
 ## Output contract
 
@@ -131,8 +105,6 @@ The skill's final response to the user must contain, in this order:
 
 1. The resolved date range, one line.
 2. The subject line that was posted.
-3. The link to the posted draft on the Readouts board (Step 6 `app_url`), labeled clearly.
-4. The image-placeholder list (filenames the user must paste in).
-5. The review checklist (one short paragraph or short bullet list).
+3. The report readout in .md
 
-Nothing else. Do not paste the HTML body or plain-text rendering into chat — the user reviews and edits the draft in Basecamp via the link.
+Nothing else.
