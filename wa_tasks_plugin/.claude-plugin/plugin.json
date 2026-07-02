@@ -1,6 +1,6 @@
 {
   "name": "wa-tasks-plugin",
-  "version": "0.7.0",
+  "version": "0.8.0",
   "description": "Foundation plugin bundling Linear, Google Drive, Gmail, and Fathom connectors, and using whatever Basecamp MCP connector is already present. Includes a 15-5 weekly report skill that posts the report as a reply on a fixed Basecamp thread, a create-todos skill that turns 15-5 priorities into Basecamp todos, and a novo-weekly-readout skill that drafts the Novo weekly readout.",
   "author": {
     "name": "Rich Nash",
