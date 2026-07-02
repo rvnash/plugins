@@ -13,6 +13,7 @@ Compile a weekly Novo readout as a .md text which can be copied/pasted into Base
 - Basecamp Message Board ID: `10006186557`
 - Linear workspace slug: `westarete-cwsl`
 - Linear team: `Engineering` (key `ENG`)
+- GMail label: `CWSL`
 
 ## Workflow
 
@@ -63,8 +64,9 @@ Run these in parallel where possible:
 1. **Fathom** — call `fathom:list_meetings` (or `fathom:search_meetings`) for meetings with `start_time >= since_date`. Keep meetings whose title, attendees, or summary reference Novo. For each kept meeting, call `fathom:get_meeting_summary` and extract: decisions, action items, customer feedback, and anything that reads as an accomplishment or news item. Record meeting title, date, and a one-line takeaway with the Fathom URL.
 2. **Microsoft Teams** — search Teams messages and channels for Novo mentions in the window. Capture decisions, announcements, blockers resolved, and customer questions. Record channel/chat name, date, author, and a one-line summary with a link.
 3. **Slack** — call `slack:slack_search_public_and_private` (fall back to `slack_search_public` if the private search isn't available) with queries like `Novo after:<since_date>`, `ENG- after:<since_date>`, and any known Novo channel names. Also `slack_read_channel` on dedicated Novo channels if known. Capture announcements, shipped-it messages, customer reports, and decisions. Record channel, date, author, permalink, and a one-line summary.
-4. **Gmail** — call `gmail:search_threads` with queries like `Novo after:<since_date>`, plus searches for known Novo stakeholder domains/addresses. Keep threads that contain product news, customer feedback, contract/legal updates, or release coordination. Record subject, date, sender, and a one-line summary with the thread link.
+4. **Gmail** — Look for messages with the `CWSL` label. Also, call `gmail:search_threads` with queries like `Novo after:<since_date>`, plus searches for known Novo stakeholder domains/addresses. Keep threads that contain product news, customer feedback, contract/legal updates, or release coordination. Record subject, date, sender, and a one-line summary with the thread link.
 5. **Zoom** — call `zoom:search_meetings` / `zoom:recordings_list` for recordings in the window. Keep meetings whose topic or participants reference Novo. For each, pull the summary or transcript snippet and extract Novo-relevant takeaways. Record meeting topic, date, and a one-line summary with the recording link.
+6. **Google Calendar** - Search Google calendar for meetings with CWSL personel, or on a CWSL or Novo topic, and throw any information from those meetings into the context.
 
 Collate the findings into a single working list grouped by source, deduplicated against the Linear issues from Step 3 (don't list a ticket twice if Slack/Teams just announced it shipping — merge them, keeping the ticket as the primary entry and the chat link as supporting context).
 
@@ -72,16 +74,15 @@ If a source returns nothing relevant, record "no Novo items found in <source>" s
 
 ### Step 4 — Ask the user for the human inputs
 
-Before asking, show the user a brief summary of what Step 3 and Step 3.5 already gathered (counts per source, e.g. "Linear: 7 tickets · Fathom: 2 meetings · Slack: 4 threads · Gmail: 1 thread · Teams: 0 · Zoom: 1 recording"), so they can fill only the gaps.
+Before asking, show the user a brief summary of what Step 3 and Step 3.5 already gathered (counts per source, e.g. "Linear: 7 tickets · Fathom: 2 meetings · Slack: 4 threads · Gmail: 1 thread · Teams: 0 · Zoom: 1 recording"), so they can fill only the gaps. In addition to the counts show the user a bullet pointed list of what topics will be covered.
 
 Use the `ask_user_input_v0` tool. Ask all of these in one call so the user answers once:
 
 1. Other accomplishments **beyond what was found in Linear, Fathom, Teams, Slack, Gmail, and Zoom** — free text or "none."
 2. Things in progress to highlight — free text or "none."
-3. Screenshots or videos to put place holders in for. Place a placeholder line like `[INSERT: mixpanel-usage-2026-05-20.png]` exactly where the image should go).
-4. Any problems to highlight
-5. Any bug fixes to highlight
-6. Anything from the auto-gathered list (Step 3.5) to **exclude** from the draft — free text or "none."
+3. Any problems to highlight
+4. Any bug fixes to highlight
+5. Anything from the auto-gathered list (Step 3.5) to **exclude** from the draft — free text or "none."
 
 
 ### Step 5 — Compose the draft
@@ -95,6 +96,7 @@ Mirror the template from Step 2 as closely as possible: same section order, same
 - Do not use Linear Ticket numbers, they are internal only
 - Do not create links to the source information
 - Weave in items from Step 3.5 alongside Linear tickets. For Fathom/Zoom meeting takeaways, link the meeting; for Slack/Teams items, link the message; for Gmail items, link the thread. Mark anything you're unsure belongs in the Novo bucket with a trailing `(?)` for the user to verify when they open the posted draft in Basecamp.
+- Organize the sections so that the current SOW information is first, with all work that is going on there. Then additional items follow.
 
 ### Step 6 — Present the result as .md text to the user
 
